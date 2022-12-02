@@ -2,7 +2,6 @@
 #define GAME_H_
 
 #include "scene.hpp"
-#include "resources.hpp"
 #include "raylib.h"
 
 namespace cge
@@ -16,9 +15,6 @@ namespace cge
 
     // Globals
     extern Scene* currentScene;
-
-    // Services
-    extern Resources<Texture2D>* textures;
 };
 
 #endif // GAME_H_
