@@ -1,0 +1,8 @@
+emcc
+%c -std=c11
+%cpp -std=c++17
+%c %cpp -lraylib
+-Iexternal/include
+-I/usr/lib/emscripten/system/include/emscripten
+-Lexternal/libs
+-DPLATFORM_DESKTOP

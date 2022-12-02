@@ -1,0 +1,15 @@
+#+title: Design Doc
+
+* Tema: "Unexpected"
+
+** Ideia principal: LoZ What The Golf
+
+- Cada nível joga-se como um clone do zelda em uma sala pequena.
+- Tem um quebra cabeça simples para resolver.
+- Mas ao mesmo tempo, cada nível "quebra" alguma convenção.
+
+Exemplos:
+- Jogador ataca bloco que era quebrável em outro nível e o bloco gruda na espada, deixando o jogador preso.
+- Jogador aperta teclas de movimento e a câmera mexe ao invés do jogador.
+- Jogador aperta uma tecla de movimento e um bloco qualquer mexe, e aí o bloco tem que levar o jogador até o objetivo.
+- Jogador aperta uma tecla de movimento qualquer e o jogador anda, quebrando a parede.
