@@ -1,8 +1,9 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
-#include "tilemap.hpp"
+#include <cmath>
 #include "player.hpp"
+#include "camerarig.hpp"
 #include "tween.hpp"
 #include "raylib.h"
 
@@ -12,30 +13,34 @@ public:
     Scene(int width, int height);
     ~Scene();
 
-    void SetTilemap(Tilemap* tilemap);
-    const Tilemap* GetTilemap() const;
-    void Update(float delta);
-    void Draw();
+    Vector2 ToTileSpace(Vector2 worldPos) const;
+    Vector2 ToWorldPos(Vector2 tilePos) const;
 
-    Player* scenePlayer;
+    void LoadMap(const char *mapFile);
+
+    char GetTile(int x, int y) const;
+    void SetTile(int x, int y, char c);
+
+    virtual void Update(float delta);
+    virtual void Draw();
+
+    Player scenePlayer;
 
 private:
     char* map;
     int mapW, mapH;
-    Tilemap* tilemap;
     Tween sceneTween;
-    Camera2D sceneCam;
+    CameraRig sceneRig;
+
+    // Used to avoid input input being too fast when keys are held
+    float inputTimer;
+
+    virtual void HandleMove(Vector2 input, float delta);
 };
 
-inline void Scene::SetTilemap(Tilemap* tilemap)
+inline char Scene::GetTile(int x, int y) const
 {
-    this->tilemap = tilemap;
-    sceneCam.target = {(float) mapW * tilemap->tileSize.x / 2, (float) mapH * tilemap->tileSize.y / 2};
-}
-
-inline const Tilemap* Scene::GetTilemap() const
-{
-    return tilemap;
+    return map[x + y * mapW];
 }
 
 #endif // SCENE_H_

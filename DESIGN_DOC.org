@@ -13,3 +13,11 @@ Exemplos:
 - Jogador aperta teclas de movimento e a câmera mexe ao invés do jogador.
 - Jogador aperta uma tecla de movimento e um bloco qualquer mexe, e aí o bloco tem que levar o jogador até o objetivo.
 - Jogador aperta uma tecla de movimento qualquer e o jogador anda, quebrando a parede.
+
+Agrupando as ideias:
+- Níveis onde o jogador é surpreendido por o jogador ser algo diferente do que espera
+  1) mecanismo para trocar o sprite do jogador
+  2) mecanismos para controlar o primeiro movimento do jogador
+- Níveis onde o jogador afeta o nível de maneiras inusitadas
+  1) mecanismo para modificar tiles do mapa
+  2) outros objetos para o jogador interagir (blocos para o jogador empurrar, chave)

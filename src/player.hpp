@@ -5,13 +5,12 @@
 
 struct Player
 {
-    Player(Vector2 pos, Vector2 size) : pos(pos), size(size) {}
-
-    void Update(Vector2 input, float delta);
-    void Draw();
+    Player(Vector2 pos, Vector2 size, char playerTexId) : pos(pos), size(size), playerTexId(playerTexId) {}
 
     Vector2 pos;
-    Vector2 size;
+    Vector2 size; // Multiplier over tilesize
+
+    char playerTexId;
 };
 
 #endif // PLAYER_H_

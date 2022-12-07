@@ -45,7 +45,7 @@ build: $(OBJS)
 	$(CXX) -o $(BUILD_DIR)/$(EXEC_NAME)$(EXEC_EXT) $(OBJS) $(RAYLIB) $(INC_FLAGS) $(LIBS_FLAGS) $(LIBS) -D$(PLATFORM) $(EXEC_FLAGS)
 
 # gotta specify the defines with -D when building the objs tho.
-$(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c $(SRC_DIR)/%.h
 	mkdir -p $(OBJ_DIR)
 	$(CC) $(INC_FLAGS) -D$(PLATFORM) $(OBJ_FLAGS) -c $< -o $@
 

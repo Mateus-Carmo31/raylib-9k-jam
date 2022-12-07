@@ -57,13 +57,11 @@ int main()
     // SetTextureWrap(renderTex.texture, TEXTURE_WRAP_REPEAT);
     // SetTextureFilter(renderTex.texture, TEXTURE_FILTER_BILINEAR);
 
-    cge::currentScene = new Scene {16, 16};
+    cge::LoadTilemap("./assets/textures/colored-transparent_packed.png", 16, 16);
+    cge::RegisterTiles();
 
-    Tilemap testmap {"./assets/textures/kenney_tinydungeon/Tilemap/tilemap_packed.png", {16, 16}};
-    testmap.RegisterTile(0, {1, 5});
-    cge::currentScene->SetTilemap(&testmap);
-
-    cge::playerTex = LoadTexture("./assets/textures/kenney_tinydungeon/Tiles/tile_0097.png");
+    cge::currentScene = new Scene {10, 10};
+    cge::currentScene->LoadMap("./assets/maps/scene1.map");
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateAndDraw, 0, 1);
@@ -81,7 +79,7 @@ int main()
     CloseAudioDevice();
 
     delete cge::currentScene;
-    UnloadTexture(cge::playerTex);
+    cge::UnloadTilemap();
     UnloadRenderTexture(renderTex);
     CloseWindow();
 
