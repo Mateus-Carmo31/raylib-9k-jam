@@ -1,5 +1,6 @@
 #include <iostream>
 #include "scene.hpp"
+#include "scenes.hpp"
 #include "game.hpp"
 #include "raylib.h"
 #include "rlgl.h"
@@ -9,22 +10,30 @@
 #endif
 
 RenderTexture renderTex;
-Camera2D cam {{(float) cge::renderW/2, (float) cge::renderH/2}, {0}, 0, 3.0};
 
 Sound testSound;
 
 void Draw()
 {
-    cge::currentScene->Update(GetFrameTime());
+    if (cge::currentScene < sizeof cge::scenes / sizeof cge::scenes[0])
+    {
+        cge::scenes[cge::currentScene]->Update(GetFrameTime());
+
+        if (cge::scenes[cge::currentScene]->sceneWon)
+        {
+            TraceLog(LOG_INFO, "Switching scene...");
+            cge::currentScene++;
+        }
+    }
 
     // Draws everything on the render texture
     BeginTextureMode(renderTex);
         ClearBackground(BLACK);
 
-        cge::currentScene->Draw();
-
-        Vector2 mousePos {(float) GetMouseX(), (float) GetMouseY()};
-        DrawCircle(mousePos.x * ((float) cge::renderW / cge::screenW), mousePos.y * ((float) cge::renderH / cge::screenH), 15, WHITE);
+        if (cge::currentScene < sizeof cge::scenes / sizeof cge::scenes[0])
+            cge::scenes[cge::currentScene]->Draw();
+        else
+            DrawThankYouScreen();
 
         DrawText(TextFormat("FPS: %d", GetFPS()), 0, 0, 8, WHITE);
 
@@ -60,8 +69,9 @@ int main()
     cge::LoadTilemap("./assets/textures/colored-transparent_packed.png", 16, 16);
     cge::RegisterTiles();
 
-    cge::currentScene = new Scene {10, 10};
-    cge::currentScene->LoadMap("./assets/maps/scene1.map");
+    cge::scenes[0] = new Scene1 {10, 10};
+    cge::scenes[1] = new Scene2 {10, 10};
+    cge::scenes[2] = new Scene3 {10, 10};
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateAndDraw, 0, 1);
@@ -78,7 +88,11 @@ int main()
     UnloadSound(testSound);
     CloseAudioDevice();
 
-    delete cge::currentScene;
+    for (int i = 0; i < sizeof cge::scenes / sizeof cge::scenes[0]; i++)
+    {
+        delete cge::scenes[i];
+    }
+
     cge::UnloadTilemap();
     UnloadRenderTexture(renderTex);
     CloseWindow();

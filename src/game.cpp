@@ -7,8 +7,6 @@ namespace cge
 
     float playerSpeed = 50;
 
-    Scene* currentScene;
-
     // Tilemap-related actions
     bool tilemapSet = false;
     Texture2D _tilemapTex;
@@ -40,6 +38,8 @@ namespace cge
         tilePositions[GROUND] = {0,0};
         tilePositions[WALL]   = {10,17};
         tilePositions[PLAYER] = {28,1};
+        tilePositions[DOOR]   = {2, 9};
+        tilePositions[BOX]    = {15, 14};
     }
 
     void DrawTile(char id, Vector2 pos)
@@ -53,7 +53,7 @@ namespace cge
                     {0}, 0, WHITE);
     }
 
-    void DrawTileCentered(char id, Vector2 pos, Vector2 customScaling)
+    void DrawTileCentered(char id, Vector2 pos, float rotation, Vector2 customScaling)
     {
         Vector2 tile = tilePositions[id];
         tile.x *= tileSize.x;
@@ -64,6 +64,10 @@ namespace cge
         DrawTexturePro(_tilemapTex,
                     { tile.x, tile.y, tileSize.x, tileSize.y },
                     { pos.x * tileSize.x + actualSize.x / 2, pos.y * tileSize.y + actualSize.y / 2, tileSize.x, tileSize.y},
-                    {actualSize.x/2, actualSize.y/2}, 0, WHITE);
+                    { actualSize.x/2, actualSize.y/2 }, rotation, WHITE);
     }
+
+
+    size_t currentScene = 0;
+    Scene* scenes[3];
 }

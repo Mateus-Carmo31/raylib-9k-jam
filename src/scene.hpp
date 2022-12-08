@@ -2,21 +2,33 @@
 #define SCENE_H_
 
 #include <cmath>
-#include "player.hpp"
 #include "camerarig.hpp"
 #include "tween.hpp"
 #include "raylib.h"
+
+struct Player
+{
+    Vector2 pos;
+    Vector2 size {1,1}; // Multiplier over tilesize
+    float rotation = 0;
+
+    char playerTexId = 'P';
+};
+
+struct Object
+{
+    Vector2 pos;
+    Vector2 size {1,1};
+    float rotation = 0;
+
+    char texId = 'B';
+};
 
 class Scene
 {
 public:
     Scene(int width, int height);
-    ~Scene();
-
-    Vector2 ToTileSpace(Vector2 worldPos) const;
-    Vector2 ToWorldPos(Vector2 tilePos) const;
-
-    void LoadMap(const char *mapFile);
+    virtual ~Scene();
 
     char GetTile(int x, int y) const;
     void SetTile(int x, int y, char c);
@@ -25,16 +37,26 @@ public:
     virtual void Draw();
 
     Player scenePlayer;
+    Object exitDoor;
 
-private:
+    bool paused = false;
+    bool sceneWon = false;
+
+    void StartLevel();
+    void FinishLevel();
+
+protected:
     char* map;
     int mapW, mapH;
     Tween sceneTween;
     CameraRig sceneRig;
 
     // Used to avoid input input being too fast when keys are held
-    float inputTimer;
+    float inputTimer = 0.2;
 
+    float fade = 0.0;
+
+    void LoadMap(const char *mapFile);
     virtual void HandleMove(Vector2 input, float delta);
 };
 

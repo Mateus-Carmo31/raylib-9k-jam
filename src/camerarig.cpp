@@ -11,9 +11,13 @@ void CameraRig::Update(float delta)
     }
 }
 
-
 void CameraRig::ApplyTrauma(float amount)
 {
     TraceLog(LOG_INFO, "Applied %.2f units to camera trauma.", amount);
     trauma = std::min(trauma + amount, 1.0f);
+}
+
+void CameraRig::SetTrauma(float value)
+{
+    trauma = std::max(std::min(value, 1.0f), 0.0f);
 }

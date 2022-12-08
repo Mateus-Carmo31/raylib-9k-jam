@@ -14,6 +14,7 @@ struct CameraRig
     Vector2 maxShake {40, 25};
 
     void ApplyTrauma(float amount);
+    void SetTrauma(float value);
     void Update(float delta);
 private:
     Vector2 defOffset;
