@@ -1,10 +1,11 @@
 #include "scenes.hpp"
+#include <cmath>
 
 void Scene3::HandleMove(Vector2 input, float delta)
 {
-    if (input.x != 0 || input.y != 0)
+    if (inputTimer == 0)
     {
-        if (inputTimer == 0)
+        if (input.x != 0 || input.y != 0)
         {
             // Move player
             float nPosX = scenePlayer.pos.x + input.x;
@@ -35,9 +36,37 @@ void Scene3::HandleMove(Vector2 input, float delta)
             }
         }
     }
-    else
+}
+
+void Scene4::HandleMove(Vector2 input, float delta)
+{
+    if (inputTimer == 0 && input.x != 0)
     {
-        inputTimer = 0;
+        if (input.x > 0.0)
+        {
+            currentRot += 90;
+            currentFacing = { currentFacing.y, -currentFacing.x };
+        }
+        else if (input.x < 0.0)
+        {
+            currentRot -= 90;
+            currentFacing = { -currentFacing.y, currentFacing.x };
+        }
+
+        Vector2 newPos = scenePlayer.pos;
+        while (InBounds(newPos) && GetTile(newPos.x, newPos.y) != cge::WALL)
+        {
+            newPos.x += currentFacing.x;
+            newPos.y += currentFacing.y;
+        }
+
+        newPos = {newPos.x - currentFacing.x, newPos.y - currentFacing.y};
+
+        sceneTween.InterpolateValue(sceneRig.cam.rotation, sceneRig.cam.rotation, currentRot, 0.5);
+        sceneTween.InterpolateValue(scenePlayer.pos, scenePlayer.pos, newPos, 0.5);
+
+        TraceLog(LOG_INFO, "Rotating... [%f]", currentRot);
+        inputTimer = 0.6;
     }
 }
 

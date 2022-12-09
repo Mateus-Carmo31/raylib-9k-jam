@@ -40,6 +40,22 @@ public:
     virtual void HandleMove(Vector2 input, float delta) override;
 };
 
+// Scene 4: the player rotates the entire room
+class Scene4 : public Scene
+{
+public:
+    Scene4(int width, int height) : Scene {width, height}
+    {
+        LoadMap("./assets/maps/scene1.map");
+        exitDoor.texId = cge::DOOR;
+    }
+
+    float currentRot = 0;
+    Vector2 currentFacing = {0,1};
+
+    virtual void HandleMove(Vector2 input, float delta) override;
+};
+
 void DrawThankYouScreen();
 
 #endif // SCENES_H_

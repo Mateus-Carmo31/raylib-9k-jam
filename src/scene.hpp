@@ -32,6 +32,7 @@ public:
 
     char GetTile(int x, int y) const;
     void SetTile(int x, int y, char c);
+    bool InBounds(Vector2 pos) const;
 
     virtual void Update(float delta);
     virtual void Draw();
@@ -63,6 +64,20 @@ protected:
 inline char Scene::GetTile(int x, int y) const
 {
     return map[x + y * mapW];
+}
+
+inline bool Scene::InBounds(Vector2 pos) const
+{
+    if (pos.x < 0)
+        return false;
+    if (pos.y < 0)
+        return false;
+    if (pos.x > mapW)
+        return false;
+    if (pos.y > mapH)
+        return false;
+
+    return true;
 }
 
 #endif // SCENE_H_

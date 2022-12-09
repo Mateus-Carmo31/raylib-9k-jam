@@ -69,5 +69,5 @@ namespace cge
 
 
     size_t currentScene = 0;
-    Scene* scenes[3];
+    Scene* scenes[4];
 }

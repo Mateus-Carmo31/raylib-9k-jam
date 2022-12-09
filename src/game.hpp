@@ -27,7 +27,7 @@ namespace cge
 
     // Levels
     extern size_t currentScene;
-    extern Scene* scenes[3];
+    extern Scene* scenes[4];
 
     // Player values
     extern float playerSpeed;

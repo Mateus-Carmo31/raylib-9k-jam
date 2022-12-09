@@ -69,9 +69,10 @@ int main()
     cge::LoadTilemap("./assets/textures/colored-transparent_packed.png", 16, 16);
     cge::RegisterTiles();
 
-    cge::scenes[0] = new Scene1 {10, 10};
+    cge::scenes[0] = new Scene4 {10, 10};
     cge::scenes[1] = new Scene2 {10, 10};
     cge::scenes[2] = new Scene3 {10, 10};
+    cge::scenes[3] = new Scene4 {10, 10};
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateAndDraw, 0, 1);
