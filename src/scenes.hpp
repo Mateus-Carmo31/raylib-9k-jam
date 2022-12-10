@@ -5,54 +5,75 @@
 #include "game.hpp"
 
 // Scene 1: nothing different
-class Scene1 : public Scene
-{
-public:
-    Scene1(int width, int height) : Scene {width, height}
-    {
-        LoadMap("./assets/maps/scene1.map");
-        exitDoor.texId = cge::DOOR;
-    }
-};
 
 // Scene 2: the door moves instead of the player
-class Scene2 : public Scene
+class SwitchScene : public LevelScene
 {
 public:
-    Scene2(int width, int height) : Scene {width, height}
+    SwitchScene(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile}
     {
-        LoadMap("./assets/maps/scene1.map");
-        scenePlayer.playerTexId = cge::DOOR;
         exitDoor.texId = cge::PLAYER;
+        scenePlayer.playerTexId = cge::DOOR;
     }
 };
 
 // Scene 3: the player and the door move together
-class Scene3 : public Scene
+class MoveTogetherScene : public LevelScene
 {
 public:
-    Scene3(int width, int height) : Scene {width, height}
-    {
-        LoadMap("./assets/maps/scene1.map");
-        exitDoor.texId = cge::DOOR;
-    }
+    MoveTogetherScene(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile} {}
 
     virtual void HandleMove(Vector2 input, float delta) override;
 };
 
 // Scene 4: the player rotates the entire room
-class Scene4 : public Scene
+class RotatingScene : public LevelScene
 {
 public:
-    Scene4(int width, int height) : Scene {width, height}
-    {
-        LoadMap("./assets/maps/scene1.map");
-        exitDoor.texId = cge::DOOR;
-    }
+    RotatingScene(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile} {}
 
     float currentRot = 0;
     Vector2 currentFacing = {0,1};
 
+    virtual void HandleMove(Vector2 input, float delta) override;
+};
+
+// Scene 5: the player is a box
+class ObjectsScene : public LevelScene
+{
+public:
+    ObjectsScene(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile}
+    {
+        scenePlayer.playerTexId = cge::BOX;
+        objects.push_back( Object { {1,2}, {1,1}, 0, 'P'} );
+    }
+};
+
+// Scene 6: the "map" moves (the camera moves)
+class LevelMoveScene : public LevelScene
+{
+public:
+    LevelMoveScene(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile} {}
+
+    virtual void HandleMove(Vector2 input, float delta) override;
+};
+
+class Scene7 : public LevelScene
+{
+public:
+    Scene7(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile}
+    {
+        cam.position = {0,0,0};
+        cam.target = {0, 0, 0};
+        cam.up = {0,1,0};
+        cam.fovy = 60;
+    }
+
+    Vector2 facing {-1,0};
+    Camera3D cam;
+
+    // virtual void Update(float delta) override;
+    virtual void Draw() override;
     virtual void HandleMove(Vector2 input, float delta) override;
 };
 

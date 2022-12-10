@@ -67,7 +67,29 @@ namespace cge
                     { actualSize.x/2, actualSize.y/2 }, rotation, WHITE);
     }
 
+    // Scenes
+    int currentScene = -1;
+    LevelScene* scenes[4];
 
-    size_t currentScene = 0;
-    Scene* scenes[4];
+    // SFXs
+    Sound stepSounds[3];
+    Sound completeSound;
+    Sound selectSound1;
+    Sound selectSound2;
+
+    void LoadSFX()
+    {
+        stepSounds[0] = LoadSound("./assets/audio/step1.wav");
+        stepSounds[1] = LoadSound("./assets/audio/step2.wav");
+        stepSounds[2] = LoadSound("./assets/audio/step3.wav");
+
+        SetSoundVolume(stepSounds[0], 0.2);
+        SetSoundVolume(stepSounds[1], 0.2);
+        SetSoundVolume(stepSounds[2], 0.2);
+    }
+
+    void PlayStepSound()
+    {
+        PlaySound(stepSounds[rand() % 3]);
+    }
 }

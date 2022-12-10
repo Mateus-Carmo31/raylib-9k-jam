@@ -3,7 +3,7 @@
 #include "game.hpp"
 #include "raylib.h"
 
-Scene::Scene(int width, int height) :
+LevelScene::LevelScene(int width, int height, const char* mapFile) :
     mapW(width),
     mapH(height),
     sceneRig(
@@ -12,10 +12,12 @@ Scene::Scene(int width, int height) :
         { (float) mapW / 2 * cge::tileSize.x, (float) mapH / 2 * cge::tileSize.y},
         0, 1.0f }, 1.0})
 {
+    exitDoor.texId = cge::DOOR;
     map = new char[width * height]();
+    LoadMap(mapFile);
 }
 
-Scene::~Scene()
+LevelScene::~LevelScene()
 {
     delete[] map;
 }
@@ -23,7 +25,7 @@ Scene::~Scene()
 Vector2 ToTile(Vector2 worldPos);
 Vector2 ToWorld(Vector2 tilePos);
 
-void Scene::LoadMap(const char *mapFile)
+void LevelScene::LoadMap(const char *mapFile)
 {
     std::ifstream fileStream { mapFile };
 
@@ -63,19 +65,19 @@ void Scene::LoadMap(const char *mapFile)
     }
 }
 
-void Scene::StartLevel()
+void LevelScene::StartLevel()
 {
     paused = true;
     sceneTween.InterpolateValue(fade, 1.0f, 0.0f, 1.0f, [this]() { this->paused = false; });
 }
 
-void Scene::FinishLevel()
+void LevelScene::FinishLevel()
 {
     sceneTween.InterpolateValue(fade, 0.0f, 1.0f, 1.0f, [this]() { this->sceneWon = true; });
     paused = true;
 }
 
-void Scene::Update(float delta)
+void LevelScene::Update(float delta)
 {
     // Handle camera rig
 
@@ -105,7 +107,7 @@ void Scene::Update(float delta)
     inputTimer = std::max(inputTimer - delta, 0.0f);
 }
 
-void Scene::HandleMove(Vector2 input, float delta)
+void LevelScene::HandleMove(Vector2 input, float delta)
 {
     if (input.x != 0 || input.y != 0)
     {
@@ -126,17 +128,14 @@ void Scene::HandleMove(Vector2 input, float delta)
             else
             {
                 sceneTween.InterpolateValue<Vector2>(scenePlayer.pos, scenePlayer.pos, Vector2 {nPosX, nPosY}, 0.15f);
+                cge::PlayStepSound();
                 inputTimer = 0.2;
             }
         }
     }
-    else
-    {
-        inputTimer = 0;
-    }
 }
 
-void Scene::Draw()
+void LevelScene::Draw()
 {
     BeginMode2D(sceneRig.cam);
     for (int i = 0; i < mapH * mapW; i++)
@@ -148,6 +147,11 @@ void Scene::Draw()
 
     cge::DrawTileCentered(exitDoor.texId, exitDoor.pos);
     cge::DrawTileCentered(scenePlayer.playerTexId, scenePlayer.pos, scenePlayer.rotation, scenePlayer.size);
+
+    for (Object& obj : objects)
+    {
+        cge::DrawTileCentered(obj.texId, obj.pos);
+    }
 
     EndMode2D();
 

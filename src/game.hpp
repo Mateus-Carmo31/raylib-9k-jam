@@ -26,11 +26,16 @@ namespace cge
     void RegisterTiles();
 
     // Levels
-    extern size_t currentScene;
-    extern Scene* scenes[4];
+    extern int currentScene;
+    extern LevelScene* scenes[4];
 
-    // Player values
-    extern float playerSpeed;
+    // SFX
+    extern Sound stepSounds[3];
+    extern Sound completeSound;
+    extern Sound selectSound1;
+    extern Sound selectSound2;
+    void LoadSFX();
+    void PlayStepSound();
 };
 
 #endif // GAME_H_

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "scene.hpp"
 #include "scenes.hpp"
+#include "ui.hpp"
 #include "game.hpp"
 #include "raylib.h"
 #include "rlgl.h"
@@ -9,13 +9,16 @@
     #include <emscripten.h>
 #endif
 
+MainMenu mainMenu;
 RenderTexture renderTex;
 
-Sound testSound;
-
-void Draw()
+void UpdateAndDraw()
 {
-    if (cge::currentScene < sizeof cge::scenes / sizeof cge::scenes[0])
+    if (cge::currentScene < 0)
+    {
+        mainMenu.Update(GetFrameTime());
+    }
+    else if (cge::currentScene < sizeof cge::scenes / sizeof cge::scenes[0])
     {
         cge::scenes[cge::currentScene]->Update(GetFrameTime());
 
@@ -30,7 +33,9 @@ void Draw()
     BeginTextureMode(renderTex);
         ClearBackground(BLACK);
 
-        if (cge::currentScene < sizeof cge::scenes / sizeof cge::scenes[0])
+        if (cge::currentScene < 0)
+            mainMenu.Draw();
+        else if (cge::currentScene < sizeof cge::scenes / sizeof cge::scenes[0])
             cge::scenes[cge::currentScene]->Draw();
         else
             DrawThankYouScreen();
@@ -50,18 +55,12 @@ void Draw()
     EndDrawing();
 }
 
-void UpdateAndDraw()
-{
-    Draw();
-}
-
 int main()
 {
-    InitWindow(cge::screenW, cge::screenH, "Testing");
+    InitWindow(cge::screenW, cge::screenH, "Billy Bob");
 
     InitAudioDevice();
 
-    testSound = LoadSound("./assets/audio/fail_shot.ogg");
     renderTex = LoadRenderTexture(cge::renderW, cge::renderH);
     // SetTextureWrap(renderTex.texture, TEXTURE_WRAP_REPEAT);
     // SetTextureFilter(renderTex.texture, TEXTURE_FILTER_BILINEAR);
@@ -69,24 +68,21 @@ int main()
     cge::LoadTilemap("./assets/textures/colored-transparent_packed.png", 16, 16);
     cge::RegisterTiles();
 
-    cge::scenes[0] = new Scene4 {10, 10};
-    cge::scenes[1] = new Scene2 {10, 10};
-    cge::scenes[2] = new Scene3 {10, 10};
-    cge::scenes[3] = new Scene4 {10, 10};
+    cge::LoadSFX();
 
-#if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(UpdateAndDraw, 0, 1);
-#else
+    cge::scenes[0] = new LevelScene {10, 7, "./assets/maps/scene1.map"};
+    cge::scenes[1] = new SwitchScene {9, 6, "./assets/maps/scene2.map"};
+    cge::scenes[2] = new MoveTogetherScene {10, 5, "./assets/maps/scene3.map"};
+    cge::scenes[3] = new RotatingScene {10, 10, "./assets/maps/scene4.map"};
+
     SetTargetFPS(60);
     // SetConfigFlags(FLAG_VSYNC_HINT);
     while (!WindowShouldClose())
     {
         UpdateAndDraw();
     }
-#endif
 
     StopSoundMulti();
-    UnloadSound(testSound);
     CloseAudioDevice();
 
     for (int i = 0; i < sizeof cge::scenes / sizeof cge::scenes[0]; i++)

@@ -6,6 +6,16 @@
 #include "tween.hpp"
 #include "raylib.h"
 
+// class Scene
+// {
+// public:
+//     Scene() {};
+//     virtual ~Scene() = 0;
+
+//     virtual void Update(float delta) = 0;
+//     virtual void Draw() = 0;
+// };
+
 struct Player
 {
     Vector2 pos;
@@ -24,11 +34,11 @@ struct Object
     char texId = 'B';
 };
 
-class Scene
+class LevelScene
 {
 public:
-    Scene(int width, int height);
-    virtual ~Scene();
+    LevelScene(int width, int height, const char* mapFile);
+    virtual ~LevelScene();
 
     char GetTile(int x, int y) const;
     void SetTile(int x, int y, char c);
@@ -39,6 +49,7 @@ public:
 
     Player scenePlayer;
     Object exitDoor;
+    std::vector<Object> objects;
 
     bool paused = false;
     bool sceneWon = false;
@@ -61,12 +72,12 @@ protected:
     virtual void HandleMove(Vector2 input, float delta);
 };
 
-inline char Scene::GetTile(int x, int y) const
+inline char LevelScene::GetTile(int x, int y) const
 {
     return map[x + y * mapW];
 }
 
-inline bool Scene::InBounds(Vector2 pos) const
+inline bool LevelScene::InBounds(Vector2 pos) const
 {
     if (pos.x < 0)
         return false;
