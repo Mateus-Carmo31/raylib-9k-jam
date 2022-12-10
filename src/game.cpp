@@ -42,6 +42,8 @@ namespace cge
         tilePositions[BOX]    = {15, 14};
     }
 
+    Color white = Color {207, 198, 184, 255};
+
     void DrawTile(char id, Vector2 pos)
     {
         Vector2 tile = tilePositions[id];
@@ -63,19 +65,18 @@ namespace cge
         actualSize.y *= customScaling.y;
         DrawTexturePro(_tilemapTex,
                     { tile.x, tile.y, tileSize.x, tileSize.y },
-                    { pos.x * tileSize.x + actualSize.x / 2, pos.y * tileSize.y + actualSize.y / 2, tileSize.x, tileSize.y},
+                    { pos.x * tileSize.x + tileSize.x/2, pos.y * tileSize.y + tileSize.y/2, actualSize.x, actualSize.y},
                     { actualSize.x/2, actualSize.y/2 }, rotation, WHITE);
     }
 
     // Scenes
     int currentScene = -1;
-    LevelScene* scenes[4];
+    LevelScene* scenes[9];
 
     // SFXs
     Sound stepSounds[3];
-    Sound completeSound;
-    Sound selectSound1;
-    Sound selectSound2;
+    Sound bigStepSound;
+    Sound shiftSound;
 
     void LoadSFX()
     {
@@ -86,10 +87,48 @@ namespace cge
         SetSoundVolume(stepSounds[0], 0.2);
         SetSoundVolume(stepSounds[1], 0.2);
         SetSoundVolume(stepSounds[2], 0.2);
+
+        bigStepSound = LoadSound("./assets/audio/big_step.wav");
+        SetSoundVolume(bigStepSound, 0.15);
+
+        shiftSound = LoadSound("./assets/audio/big_shift.wav");
+        SetSoundVolume(shiftSound, 0.15);
+    }
+
+    void UnloadSFX()
+    {
+        UnloadSound(stepSounds[0]);
+        UnloadSound(stepSounds[1]);
+        UnloadSound(stepSounds[2]);
+
+        UnloadSound(bigStepSound);
+        UnloadSound(shiftSound);
     }
 
     void PlayStepSound()
     {
         PlaySound(stepSounds[rand() % 3]);
+    }
+
+    Texture2D logo;
+    Texture2D bg;
+
+    void LoadTextures()
+    {
+        logo = LoadTexture("./assets/textures/title.png");
+        bg = LoadTexture("./assets/textures/bg.png");
+        SetTextureFilter(bg, TEXTURE_FILTER_BILINEAR);
+    }
+
+    void UnloadTextures()
+    {
+        UnloadTexture(logo);
+        UnloadTexture(bg);
+    }
+
+    void DrawTextCentered(const char* text, int posX, int posY, int fontSize, Color color)
+    {
+        float textSize = MeasureText(text, fontSize);
+        DrawText(text, posX - textSize/2, posY - fontSize / 2, fontSize, color);
     }
 }

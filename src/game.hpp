@@ -25,17 +25,28 @@ namespace cge
     const char BOX    = 'B';
     void RegisterTiles();
 
+    extern Color white;
+
     // Levels
     extern int currentScene;
-    extern LevelScene* scenes[4];
+    extern LevelScene* scenes[9];
+
+    // Textures
+    extern Texture2D logo;
+    extern Texture2D bg;
+    void LoadTextures();
+    void UnloadTextures();
 
     // SFX
     extern Sound stepSounds[3];
-    extern Sound completeSound;
-    extern Sound selectSound1;
-    extern Sound selectSound2;
+    extern Sound bigStepSound;
+    extern Sound shiftSound;
     void LoadSFX();
+    void UnloadSFX();
     void PlayStepSound();
+
+    // Text
+    void DrawTextCentered(const char* text, int posX, int posY, int fontSize, Color color);
 };
 
 #endif // GAME_H_

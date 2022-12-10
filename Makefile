@@ -30,7 +30,7 @@ LIBS_DIRS := ./external/libs
 ifeq ($(PLATFORM),PLATFORM_WEB)
 	CC = emcc
 	CXX = emcc
-	EXEC_FLAGS := $(EXEC_FLAGS) -sUSE_GLFW=3 -sASYNCIFY --preload-file $(ASSETS_DIR) --emrun
+	EXEC_FLAGS := $(EXEC_FLAGS) -sUSE_GLFW=3 --shell-file $(SRC_DIR)/custom_shell.html --preload-file $(ASSETS_DIR) --emrun
 	EXEC_EXT := .html
 	RAYLIB := ./external/libs/web/libraylib.a
 else

@@ -45,7 +45,7 @@ public:
     ObjectsScene(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile}
     {
         scenePlayer.playerTexId = cge::BOX;
-        objects.push_back( Object { {1,2}, {1,1}, 0, 'P'} );
+        objects.push_back( Object { {3,5}, {1,1}, 0, 'P'} );
     }
 };
 
@@ -58,24 +58,55 @@ public:
     virtual void HandleMove(Vector2 input, float delta) override;
 };
 
-class Scene7 : public LevelScene
+class LargeBillyScene : public LevelScene
 {
 public:
-    Scene7(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile}
+    LargeBillyScene(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile}
     {
-        cam.position = {0,0,0};
-        cam.target = {0, 0, 0};
-        cam.up = {0,1,0};
-        cam.fovy = 60;
+        scenePlayer.pos = {-100, -100};
+        scenePlayer.size = {5,5};
     }
 
-    Vector2 facing {-1,0};
-    Camera3D cam;
-
-    // virtual void Update(float delta) override;
-    virtual void Draw() override;
+    bool firstMove = true;
     virtual void HandleMove(Vector2 input, float delta) override;
 };
+
+class RotatingScene2 : public RotatingScene
+{
+public:
+    RotatingScene2(int width, int height, const char* mapFile) : RotatingScene {width, height, mapFile}
+    {
+        scenePlayer.playerTexId = cge::DOOR;
+        exitDoor.texId = cge::PLAYER;
+    }
+};
+
+class FinalScene : public LevelScene
+{
+public:
+    FinalScene(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile} {}
+
+    virtual void Draw() override;
+};
+
+// class Scene7 : public LevelScene
+// {
+// public:
+//     Scene7(int width, int height, const char* mapFile) : LevelScene {width, height, mapFile}
+//     {
+//         cam.position = {0,0,0};
+//         cam.target = {0, 0, 0};
+//         cam.up = {0,1,0};
+//         cam.fovy = 60;
+//     }
+
+//     Vector2 facing {-1,0};
+//     Camera3D cam;
+
+//     // virtual void Update(float delta) override;
+//     virtual void Draw() override;
+//     virtual void HandleMove(Vector2 input, float delta) override;
+// };
 
 void DrawThankYouScreen();
 

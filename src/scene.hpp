@@ -72,6 +72,11 @@ protected:
     virtual void HandleMove(Vector2 input, float delta);
 };
 
+inline void LevelScene::SetTile(int x, int y, char c)
+{
+    map[x + y * mapW] = c;
+}
+
 inline char LevelScene::GetTile(int x, int y) const
 {
     return map[x + y * mapW];
@@ -83,9 +88,9 @@ inline bool LevelScene::InBounds(Vector2 pos) const
         return false;
     if (pos.y < 0)
         return false;
-    if (pos.x > mapW)
+    if (pos.x >= mapW)
         return false;
-    if (pos.y > mapH)
+    if (pos.y >= mapH)
         return false;
 
     return true;
